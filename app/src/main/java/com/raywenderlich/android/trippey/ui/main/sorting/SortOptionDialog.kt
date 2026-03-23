@@ -41,21 +41,24 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.raywenderlich.android.trippey.App
 import com.raywenderlich.android.trippey.R
+import com.raywenderlich.android.trippey.databinding.DialogSortingBinding
 import com.raywenderlich.android.trippey.model.ByName
 import com.raywenderlich.android.trippey.model.ByNumberOfLocations
 import com.raywenderlich.android.trippey.model.None
 import com.raywenderlich.android.trippey.model.SortOption
-import kotlinx.android.synthetic.main.dialog_sorting.*
 
 class SortOptionDialog(
   private val onSortOptionsSelected: (SortOption) -> Unit
 ) : DialogFragment() {
 
   private val repository by lazy { App.repository }
+  private var _binding: DialogSortingBinding? = null
+  private val binding get() = _binding!!
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    return inflater.inflate(R.layout.dialog_sorting, container, false)
+    _binding = DialogSortingBinding.inflate(inflater, container, false)
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,13 +67,13 @@ class SortOptionDialog(
   }
 
   private fun initUi() {
-    confirmButton.setOnClickListener {
+    binding.confirmButton.setOnClickListener {
       onSortOptionSelected()
     }
 
     val currentSort = repository.getSortOption()
 
-    sortOptions.check(when (currentSort) {
+    binding.sortOptions.check(when (currentSort) {
       ByName -> R.id.sortByTitle
       ByNumberOfLocations -> R.id.sortByNumberOfLocations
       else -> R.id.noSort
@@ -78,7 +81,7 @@ class SortOptionDialog(
   }
 
   private fun onSortOptionSelected() {
-    val selectedOption = sortOptions.checkedRadioButtonId
+    val selectedOption = binding.sortOptions.checkedRadioButtonId
 
     onSortOptionsSelected(when (selectedOption) {
       R.id.sortByNumberOfLocations -> ByNumberOfLocations
@@ -98,5 +101,10 @@ class SortOptionDialog(
     super.onStart()
     dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
       WindowManager.LayoutParams.WRAP_CONTENT)
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
   }
 }

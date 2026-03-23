@@ -39,13 +39,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.raywenderlich.android.trippey.App
-import com.raywenderlich.android.trippey.R
+import com.raywenderlich.android.trippey.databinding.ActivityAddTripBinding
 import com.raywenderlich.android.trippey.model.Trip
-import kotlinx.android.synthetic.main.activity_add_trip.*
 
 class AddTripActivity : AppCompatActivity() {
 
   private val repository by lazy { App.repository }
+  private lateinit var binding: ActivityAddTripBinding
 
   companion object {
     fun getIntent(context: Context): Intent = Intent(context, AddTripActivity::class.java)
@@ -53,19 +53,20 @@ class AddTripActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_add_trip)
+    binding = ActivityAddTripBinding.inflate(layoutInflater)
+    setContentView(binding.root)
     initUi()
   }
 
   private fun initUi() {
-    addTrip.setOnClickListener { createTrip() }
+    binding.addTrip.setOnClickListener { createTrip() }
   }
 
   private fun createTrip() {
-    val tripTitle = tripTitle.text.toString()
-    val tripDescription = tripDescription.text.toString()
-    val country = destinationCountry.text.toString()
-    val tripImage = tripImage.text.toString()
+    val tripTitle = binding.tripTitle.text.toString()
+    val tripDescription = binding.tripDescription.text.toString()
+    val country = binding.destinationCountry.text.toString()
+    val tripImage = binding.tripImage.text.toString()
 
     if (tripTitle.isNotEmpty() && tripDescription.isNotEmpty() && country.isNotEmpty()) {
       repository.saveTrip(

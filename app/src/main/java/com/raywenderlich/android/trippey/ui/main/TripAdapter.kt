@@ -37,7 +37,7 @@ package com.raywenderlich.android.trippey.ui.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.raywenderlich.android.trippey.R
+import com.raywenderlich.android.trippey.databinding.ItemTripBinding
 import com.raywenderlich.android.trippey.model.*
 
 class TripAdapter(
@@ -66,8 +66,8 @@ class TripAdapter(
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
-    val view = LayoutInflater.from(parent.context).inflate(R.layout.item_trip, parent, false)
+    val binding = ItemTripBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-    return TripViewHolder(view)
+    return TripViewHolder(binding)
   }
 }

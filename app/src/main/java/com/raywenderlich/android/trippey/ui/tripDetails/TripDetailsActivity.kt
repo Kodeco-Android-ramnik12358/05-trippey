@@ -42,17 +42,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.raywenderlich.android.trippey.App
 import com.raywenderlich.android.trippey.R
+import com.raywenderlich.android.trippey.databinding.ActivityTripDetailsBinding
 import com.raywenderlich.android.trippey.model.Trip
 import com.raywenderlich.android.trippey.model.TripLocation
 import com.raywenderlich.android.trippey.ui.tripDetails.locations.AddLocationDialogFragment
 import com.raywenderlich.android.trippey.ui.tripDetails.locations.LocationAdapter
 import com.raywenderlich.android.trippey.utils.createAndShowDialog
-import kotlinx.android.synthetic.main.activity_trip_details.*
 
 class TripDetailsActivity : AppCompatActivity() {
 
   private val repository by lazy { App.repository }
   private val adapter by lazy { LocationAdapter(::onItemLongTapped) }
+  private lateinit var binding: ActivityTripDetailsBinding
 
   private var trip: Trip? = null
 
@@ -67,7 +68,8 @@ class TripDetailsActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_trip_details)
+    binding = ActivityTripDetailsBinding.inflate(layoutInflater)
+    setContentView(binding.root)
     initUi()
     getData()
   }
@@ -80,9 +82,9 @@ class TripDetailsActivity : AppCompatActivity() {
   private fun showData() {
     val trip = trip ?: return
 
-    tripName.text = trip.title
-    tripDescription.text = trip.details
-    tripCountry.text = trip.country
+    binding.tripName.text = trip.title
+    binding.tripDescription.text = trip.details
+    binding.tripCountry.text = trip.country
 
     val imageToLoad = when {
       trip.imageUrl != null -> trip.imageUrl
@@ -92,9 +94,9 @@ class TripDetailsActivity : AppCompatActivity() {
     }
 
     if (imageToLoad.isNullOrBlank()) {
-      tripImage.setImageResource(R.drawable.placeholder_image)
+      binding.tripImage.setImageResource(R.drawable.placeholder_image)
     } else {
-      Glide.with(this).load(imageToLoad).into(tripImage)
+      Glide.with(this).load(imageToLoad).into(binding.tripImage)
     }
 
     adapter.setData(trip.locations)
@@ -105,9 +107,9 @@ class TripDetailsActivity : AppCompatActivity() {
   }
 
   private fun initUi() {
-    tripLocationsList.layoutManager = LinearLayoutManager(this)
-    tripLocationsList.adapter = adapter
-    addTripLocation.setOnClickListener {
+    binding.tripLocationsList.layoutManager = LinearLayoutManager(this)
+    binding.tripLocationsList.adapter = adapter
+    binding.addTripLocation.setOnClickListener {
       val dialog = AddLocationDialogFragment { tripLocation ->
         addLocationToTrip(tripLocation)
       }

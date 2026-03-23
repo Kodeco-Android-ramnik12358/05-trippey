@@ -34,22 +34,21 @@
 
 package com.raywenderlich.android.trippey.ui.tripDetails.locations
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.raywenderlich.android.trippey.databinding.ItemTripLocationBinding
 import com.raywenderlich.android.trippey.model.TripLocation
-import kotlinx.android.synthetic.main.item_trip_location.view.*
 
-class LocationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class LocationViewHolder(private val binding: ItemTripLocationBinding) : RecyclerView.ViewHolder(binding.root) {
 
   fun showData(tripLocation: TripLocation,
-               onItemLongTapped: (TripLocation) -> Unit) = with(itemView) {
-    locationName.text = tripLocation.name
-    locationAddress.text = tripLocation.address
+               onItemLongTapped: (TripLocation) -> Unit) {
+    binding.locationName.text = tripLocation.name
+    binding.locationAddress.text = tripLocation.address
 
-    Glide.with(itemView).load(tripLocation.locationImageUrl).into(locationImage)
+    Glide.with(itemView).load(tripLocation.locationImageUrl).into(binding.locationImage)
 
-    setOnLongClickListener {
+    itemView.setOnLongClickListener {
       onItemLongTapped(tripLocation)
 
       true

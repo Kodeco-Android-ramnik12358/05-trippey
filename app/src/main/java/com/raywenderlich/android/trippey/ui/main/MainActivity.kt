@@ -39,36 +39,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.raywenderlich.android.trippey.App
 import com.raywenderlich.android.trippey.R
+import com.raywenderlich.android.trippey.databinding.ActivityMainBinding
 import com.raywenderlich.android.trippey.model.Trip
 import com.raywenderlich.android.trippey.ui.addTrip.AddTripActivity
 import com.raywenderlich.android.trippey.ui.main.sorting.SortOptionDialog
 import com.raywenderlich.android.trippey.ui.tripDetails.TripDetailsActivity
 import com.raywenderlich.android.trippey.utils.createAndShowDialog
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
   private val adapter by lazy { TripAdapter(::onItemLongTapped, ::onItemTapped) }
   private val repository by lazy { App.repository }
+  private lateinit var binding: ActivityMainBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.AppTheme)
 
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     initUi()
   }
 
   private fun initUi() {
-    tripsList.adapter = adapter
-    tripsList.layoutManager = LinearLayoutManager(this)
+    binding.tripsList.adapter = adapter
+    binding.tripsList.layoutManager = LinearLayoutManager(this)
 
-    addTrip.setOnClickListener {
+    binding.addTrip.setOnClickListener {
       startActivity(AddTripActivity.getIntent(this))
     }
 
-    filterOptions.setOnClickListener {
+    binding.filterOptions.setOnClickListener {
       showFilterAndSortingDialog()
     }
   }

@@ -41,15 +41,19 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.raywenderlich.android.trippey.R
+import com.raywenderlich.android.trippey.databinding.DialogAddTripLocationBinding
 import com.raywenderlich.android.trippey.model.TripLocation
-import kotlinx.android.synthetic.main.dialog_add_trip_location.*
 
 class AddLocationDialogFragment(private val onTripLocationAdded: (TripLocation) -> Unit)
   : DialogFragment() {
 
+  private var _binding: DialogAddTripLocationBinding? = null
+  private val binding get() = _binding!!
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    return inflater.inflate(R.layout.dialog_add_trip_location, container, false)
+    _binding = DialogAddTripLocationBinding.inflate(inflater, container, false)
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,13 +62,13 @@ class AddLocationDialogFragment(private val onTripLocationAdded: (TripLocation) 
   }
 
   private fun initUi() {
-    addTripLocation.setOnClickListener { addEntry() }
+    binding.addTripLocation.setOnClickListener { addEntry() }
   }
 
   private fun addEntry() {
-    val locationName = locationNameInput.text.toString()
-    val locationAddress = locationAddressInput.text.toString()
-    val locationImageUrl = locationImageUrl.text.toString()
+    val locationName = binding.locationNameInput.text.toString()
+    val locationAddress = binding.locationAddressInput.text.toString()
+    val locationImageUrl = binding.locationImageUrl.text.toString()
 
     if (locationName.isNotEmpty() && locationAddress.isNotEmpty()) {
       onTripLocationAdded(TripLocation(locationName, locationAddress, locationImageUrl))
@@ -82,5 +86,10 @@ class AddLocationDialogFragment(private val onTripLocationAdded: (TripLocation) 
     super.onStart()
     dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
       WindowManager.LayoutParams.WRAP_CONTENT)
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
   }
 }

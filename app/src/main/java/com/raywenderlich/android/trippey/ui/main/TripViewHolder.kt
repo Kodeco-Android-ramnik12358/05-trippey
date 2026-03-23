@@ -34,18 +34,17 @@
 
 package com.raywenderlich.android.trippey.ui.main
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.raywenderlich.android.trippey.R
+import com.raywenderlich.android.trippey.databinding.ItemTripBinding
 import com.raywenderlich.android.trippey.model.Trip
-import kotlinx.android.synthetic.main.item_trip.view.*
 
-class TripViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class TripViewHolder(private val binding: ItemTripBinding) : RecyclerView.ViewHolder(binding.root) {
 
-  fun showData(trip: Trip, onItemLongTap: (Trip) -> Unit, onItemTapped: (Trip) -> Unit) = with(itemView) {
-    tripName.text = trip.title
-    tripDescription.text = trip.details
+  fun showData(trip: Trip, onItemLongTap: (Trip) -> Unit, onItemTapped: (Trip) -> Unit) {
+    binding.tripName.text = trip.title
+    binding.tripDescription.text = trip.details
 
     val imageToLoad = when {
       trip.imageUrl != null -> trip.imageUrl
@@ -55,17 +54,17 @@ class TripViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     if (imageToLoad.isNullOrBlank()) {
-      tripImage.setImageResource(R.drawable.placeholder_image)
+      binding.tripImage.setImageResource(R.drawable.placeholder_image)
     } else {
-      Glide.with(itemView).load(imageToLoad).into(tripImage)
+      Glide.with(itemView).load(imageToLoad).into(binding.tripImage)
     }
 
-    setOnLongClickListener {
+    itemView.setOnLongClickListener {
       onItemLongTap(trip)
       true
     }
 
-    setOnClickListener {
+    itemView.setOnClickListener {
       onItemTapped(trip)
     }
   }
