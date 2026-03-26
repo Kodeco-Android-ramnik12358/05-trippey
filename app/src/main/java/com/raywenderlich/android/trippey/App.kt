@@ -35,6 +35,8 @@
 package com.raywenderlich.android.trippey
 
 import android.app.Application
+import com.raywenderlich.android.trippey.files.FilesHelper
+import com.raywenderlich.android.trippey.files.FilesHelperImpl
 import com.raywenderlich.android.trippey.repository.TrippeyRepository
 import com.raywenderlich.android.trippey.repository.TrippeyRepositoryImpl
 
@@ -52,7 +54,16 @@ class App : Application() {
             )
         }
 
-        val repository: TrippeyRepository by lazy { TrippeyRepositoryImpl(sharedPreferences) }
+        private val filesHelper: FilesHelper by lazy {
+            FilesHelperImpl(instance.filesDir)
+        }
+
+        val repository: TrippeyRepository by lazy {
+            TrippeyRepositoryImpl(
+                sharedPreferences,
+                filesHelper
+            )
+        }
     }
 
     override fun onCreate() {

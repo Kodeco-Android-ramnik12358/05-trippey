@@ -35,11 +35,15 @@
 package com.raywenderlich.android.trippey.repository
 
 import android.content.SharedPreferences
+import com.raywenderlich.android.trippey.files.FilesHelper
 import com.raywenderlich.android.trippey.model.SortOption
 import com.raywenderlich.android.trippey.model.Trip
 import com.raywenderlich.android.trippey.model.getSortOptionFromName
 
-class TrippeyRepositoryImpl(private val sharedPreferences: SharedPreferences) : TrippeyRepository {
+class TrippeyRepositoryImpl(
+    private val sharedPreferences: SharedPreferences,
+    private val filesHelper: FilesHelper
+) : TrippeyRepository {
 
     companion object {
         const val KEY_SORT_OPTION = "sort_option"
