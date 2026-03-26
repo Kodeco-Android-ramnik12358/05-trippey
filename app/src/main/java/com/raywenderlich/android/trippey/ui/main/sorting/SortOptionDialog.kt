@@ -33,25 +33,26 @@
  */
 package com.raywenderlich.android.trippey.ui.main.sorting
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import com.raywenderlich.android.trippey.App
 import com.raywenderlich.android.trippey.R
 import com.raywenderlich.android.trippey.databinding.DialogSortingBinding
 import com.raywenderlich.android.trippey.model.ByName
 import com.raywenderlich.android.trippey.model.ByNumberOfLocations
 import com.raywenderlich.android.trippey.model.None
 import com.raywenderlich.android.trippey.model.SortOption
+import com.raywenderlich.android.trippey.model.getSortOptionFromName
+import com.raywenderlich.android.trippey.repository.TrippeyRepositoryImpl.Companion.KEY_SORT_OPTION
 
 class SortOptionDialog(
   private val onSortOptionsSelected: (SortOption) -> Unit
 ) : DialogFragment() {
 
-  private val repository by lazy { App.repository }
   private var _binding: DialogSortingBinding? = null
   private val binding get() = _binding!!
 
@@ -71,13 +72,21 @@ class SortOptionDialog(
       onSortOptionSelected()
     }
 
-    val currentSort = repository.getSortOption()
+    val currentSort = getSortOption()
 
     binding.sortOptions.check(when (currentSort) {
       ByName -> R.id.sortByTitle
       ByNumberOfLocations -> R.id.sortByNumberOfLocations
       else -> R.id.noSort
     })
+  }
+
+  private fun getSortOption(): SortOption{
+    val localPreferences = activity?.getPreferences(MODE_PRIVATE)
+
+    return getSortOptionFromName(
+      localPreferences?.getString(KEY_SORT_OPTION, "") ?: ""
+    )
   }
 
   private fun onSortOptionSelected() {

@@ -42,7 +42,7 @@ import com.raywenderlich.android.trippey.model.getSortOptionFromName
 class TrippeyRepositoryImpl(private val sharedPreferences: SharedPreferences) : TrippeyRepository {
 
     companion object {
-        private const val KEY_SORT_OPTION = "sort_option"
+        const val KEY_SORT_OPTION = "sort_option"
     }
 
     private val trips = mutableListOf<Trip>()
