@@ -41,7 +41,12 @@ class TrippeyDatabase(context: Context) :
     }
 
     fun deleteTrip(tripId: String) {
-        // TODO
+        val database = writableDatabase ?: return
+
+        val selection = DatabaseConstants.QUERY_BY_ID
+        val selectionArguments = arrayOf(tripId)
+
+        database.delete(TRIP_TABLE_NAME, selection, selectionArguments)
     }
 
     fun getTrips(): List<Trip> {
