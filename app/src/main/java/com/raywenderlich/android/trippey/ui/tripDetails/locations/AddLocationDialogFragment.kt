@@ -41,8 +41,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.raywenderlich.android.trippey.R
-import com.raywenderlich.android.trippey.databinding.DialogAddTripLocationBinding
 import com.raywenderlich.android.trippey.model.TripLocation
+import com.raywenderlich.android.trippey.databinding.DialogAddTripLocationBinding
 
 class AddLocationDialogFragment(private val onTripLocationAdded: (TripLocation) -> Unit)
   : DialogFragment() {
@@ -59,6 +59,11 @@ class AddLocationDialogFragment(private val onTripLocationAdded: (TripLocation) 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initUi()
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
   }
 
   private fun initUi() {
@@ -86,10 +91,5 @@ class AddLocationDialogFragment(private val onTripLocationAdded: (TripLocation) 
     super.onStart()
     dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
       WindowManager.LayoutParams.WRAP_CONTENT)
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    _binding = null
   }
 }

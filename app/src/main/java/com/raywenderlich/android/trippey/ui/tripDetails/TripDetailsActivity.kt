@@ -42,20 +42,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.raywenderlich.android.trippey.App
 import com.raywenderlich.android.trippey.R
-import com.raywenderlich.android.trippey.databinding.ActivityTripDetailsBinding
 import com.raywenderlich.android.trippey.model.Trip
 import com.raywenderlich.android.trippey.model.TripLocation
 import com.raywenderlich.android.trippey.ui.tripDetails.locations.AddLocationDialogFragment
 import com.raywenderlich.android.trippey.ui.tripDetails.locations.LocationAdapter
 import com.raywenderlich.android.trippey.utils.createAndShowDialog
+import com.raywenderlich.android.trippey.databinding.ActivityTripDetailsBinding
 
 class TripDetailsActivity : AppCompatActivity() {
 
   private val repository by lazy { App.repository }
   private val adapter by lazy { LocationAdapter(::onItemLongTapped) }
-  private lateinit var binding: ActivityTripDetailsBinding
 
   private var trip: Trip? = null
+  private lateinit var binding: ActivityTripDetailsBinding
 
   companion object {
     private const val KEY_TRIP = "trip"

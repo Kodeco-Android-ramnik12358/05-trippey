@@ -36,8 +36,8 @@ package com.raywenderlich.android.trippey.ui.tripDetails.locations
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.raywenderlich.android.trippey.databinding.ItemTripLocationBinding
 import com.raywenderlich.android.trippey.model.TripLocation
+import com.raywenderlich.android.trippey.databinding.ItemTripLocationBinding
 
 class LocationViewHolder(private val binding: ItemTripLocationBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -48,7 +48,7 @@ class LocationViewHolder(private val binding: ItemTripLocationBinding) : Recycle
 
     Glide.with(itemView).load(tripLocation.locationImageUrl).into(binding.locationImage)
 
-    itemView.setOnLongClickListener {
+    binding.root.setOnLongClickListener {
       onItemLongTapped(tripLocation)
 
       true

@@ -37,8 +37,8 @@ package com.raywenderlich.android.trippey.ui.tripDetails.locations
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.raywenderlich.android.trippey.databinding.ItemTripLocationBinding
 import com.raywenderlich.android.trippey.model.TripLocation
+import com.raywenderlich.android.trippey.databinding.ItemTripLocationBinding
 
 class LocationAdapter(private val onItemLongTapped: (TripLocation) -> Unit)
   : RecyclerView.Adapter<LocationViewHolder>() {
@@ -59,7 +59,6 @@ class LocationAdapter(private val onItemLongTapped: (TripLocation) -> Unit)
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
     val binding = ItemTripLocationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
     return LocationViewHolder(binding)
   }
 }

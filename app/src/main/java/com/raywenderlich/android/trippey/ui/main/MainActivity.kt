@@ -34,12 +34,12 @@
 
 package com.raywenderlich.android.trippey.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.raywenderlich.android.trippey.App
 import com.raywenderlich.android.trippey.R
-import com.raywenderlich.android.trippey.databinding.ActivityMainBinding
 import com.raywenderlich.android.trippey.model.SortOption
 import com.raywenderlich.android.trippey.model.Trip
 import com.raywenderlich.android.trippey.model.getSortOptionFromName
@@ -48,12 +48,14 @@ import com.raywenderlich.android.trippey.ui.addTrip.AddTripActivity
 import com.raywenderlich.android.trippey.ui.main.sorting.SortOptionDialog
 import com.raywenderlich.android.trippey.ui.tripDetails.TripDetailsActivity
 import com.raywenderlich.android.trippey.utils.createAndShowDialog
+import com.raywenderlich.android.trippey.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
   private val adapter by lazy { TripAdapter(::onItemLongTapped, ::onItemTapped) }
   private val repository by lazy { App.repository }
-  private val localPreferences by lazy { getPreferences(MODE_PRIVATE)}
+
+  private val localPreferences by lazy { getPreferences(Context.MODE_PRIVATE) }
   private lateinit var binding: ActivityMainBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,13 +93,7 @@ class MainActivity : AppCompatActivity() {
     adapter.setData(repository.getTrips(), getSortOption())
   }
 
-  override fun onResume() {
-    super.onResume()
-
-    refreshData()
-  }
-
-  private fun getSortOption() : SortOption {
+  private fun getSortOption(): SortOption {
     return getSortOptionFromName(localPreferences.getString(KEY_SORT_OPTION, "") ?: "")
   }
 
@@ -105,6 +101,12 @@ class MainActivity : AppCompatActivity() {
     localPreferences.edit()
       .putString(KEY_SORT_OPTION, sortOption.name)
       .apply()
+  }
+
+  override fun onResume() {
+    super.onResume()
+
+    refreshData()
   }
 
   private fun onItemLongTapped(trip: Trip) {

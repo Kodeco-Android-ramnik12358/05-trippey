@@ -1,3 +1,5 @@
+package com.raywenderlich.android.trippey.database
+
 /*
  * Copyright (c) 2020 Razeware LLC
  *
@@ -31,54 +33,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+object DatabaseConstants {
 
-package com.raywenderlich.android.trippey.ui.addTrip
+  const val DATABASE_NAME = "Trippey"
+  const val DATABASE_VERSION = 1
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.raywenderlich.android.trippey.App
-import com.raywenderlich.android.trippey.model.Trip
-import com.raywenderlich.android.trippey.databinding.ActivityAddTripBinding
+  /**
+   * Table names and column names for the database model.
+   */
 
-class AddTripActivity : AppCompatActivity() {
+  const val TRIP_TABLE_NAME = "trips"
+  const val COLUMN_ID = "id"
+  const val COLUMN_TITLE = "title"
+  const val COLUMN_COUNTRY = "country"
+  const val COLUMN_DETAILS = "details"
+  const val COLUMN_IMAGE_URL = "imageUrl"
+  const val COLUMN_LOCATIONS = "locations"
 
-  private val repository by lazy { App.repository }
-  private lateinit var binding: ActivityAddTripBinding
+  /**
+   * Queries to help out with database setup.
+   * */
 
-  companion object {
-    fun getIntent(context: Context): Intent = Intent(context, AddTripActivity::class.java)
-  }
+  const val SQL_CREATE_ENTRIES = """
+    CREATE TABLE $TRIP_TABLE_NAME
+    ($COLUMN_ID TEXT PRIMARY KEY,
+     $COLUMN_TITLE TEXT NOT NULL,
+     $COLUMN_COUNTRY TEXT NOT NULL DEFAULT '',
+     $COLUMN_DETAILS TEXT NOT NULL,
+     $COLUMN_IMAGE_URL TEXT)
+  """
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    binding = ActivityAddTripBinding.inflate(layoutInflater)
-    setContentView(binding.root)
-    initUi()
-  }
-
-  private fun initUi() {
-    binding.addTrip.setOnClickListener { createTrip() }
-  }
-
-  private fun createTrip() {
-    val tripTitle = binding.tripTitle.text.toString()
-    val tripDescription = binding.tripDescription.text.toString()
-    val country = binding.destinationCountry.text.toString()
-    val tripImage = binding.tripImage.text.toString()
-
-    if (tripTitle.isNotEmpty() && tripDescription.isNotEmpty() && country.isNotEmpty()) {
-      repository.saveTrip(
-        Trip(
-          title = tripTitle,
-          country = country,
-          details = tripDescription,
-          imageUrl = tripImage
-        )
-      )
-
-      finish()
-    }
-  }
+  const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS $TRIP_TABLE_NAME"
 }

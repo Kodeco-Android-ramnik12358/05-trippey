@@ -33,31 +33,31 @@
  */
 package com.raywenderlich.android.trippey.ui.main.sorting
 
-import android.content.Context.MODE_PRIVATE
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import com.raywenderlich.android.trippey.App
 import com.raywenderlich.android.trippey.R
+import com.raywenderlich.android.trippey.model.*
+import com.raywenderlich.android.trippey.repository.TrippeyRepositoryImpl
 import com.raywenderlich.android.trippey.databinding.DialogSortingBinding
-import com.raywenderlich.android.trippey.model.ByName
-import com.raywenderlich.android.trippey.model.ByNumberOfLocations
-import com.raywenderlich.android.trippey.model.None
-import com.raywenderlich.android.trippey.model.SortOption
-import com.raywenderlich.android.trippey.model.getSortOptionFromName
-import com.raywenderlich.android.trippey.repository.TrippeyRepositoryImpl.Companion.KEY_SORT_OPTION
 
 class SortOptionDialog(
   private val onSortOptionsSelected: (SortOption) -> Unit
 ) : DialogFragment() {
 
+  private val repository by lazy { App.repository }
   private var _binding: DialogSortingBinding? = null
   private val binding get() = _binding!!
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                            savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     _binding = DialogSortingBinding.inflate(inflater, container, false)
     return binding.root
   }
@@ -67,6 +67,11 @@ class SortOptionDialog(
     initUi()
   }
 
+  override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
+  }
+
   private fun initUi() {
     binding.confirmButton.setOnClickListener {
       onSortOptionSelected()
@@ -74,29 +79,36 @@ class SortOptionDialog(
 
     val currentSort = getSortOption()
 
-    binding.sortOptions.check(when (currentSort) {
-      ByName -> R.id.sortByTitle
-      ByNumberOfLocations -> R.id.sortByNumberOfLocations
-      else -> R.id.noSort
-    })
+    binding.sortOptions.check(
+      when (currentSort) {
+        ByName -> R.id.sortByTitle
+        ByNumberOfLocations -> R.id.sortByNumberOfLocations
+        else -> R.id.noSort
+      }
+    )
   }
 
-  private fun getSortOption(): SortOption{
-    val localPreferences = activity?.getPreferences(MODE_PRIVATE)
+  private fun getSortOption(): SortOption {
+    val localPreferences = activity?.getPreferences(Context.MODE_PRIVATE)
 
     return getSortOptionFromName(
-      localPreferences?.getString(KEY_SORT_OPTION, "") ?: ""
+      localPreferences?.getString(
+        TrippeyRepositoryImpl.KEY_SORT_OPTION,
+        ""
+      ) ?: ""
     )
   }
 
   private fun onSortOptionSelected() {
     val selectedOption = binding.sortOptions.checkedRadioButtonId
 
-    onSortOptionsSelected(when (selectedOption) {
-      R.id.sortByNumberOfLocations -> ByNumberOfLocations
-      R.id.sortByTitle -> ByName
-      else -> None
-    })
+    onSortOptionsSelected(
+      when (selectedOption) {
+        R.id.sortByNumberOfLocations -> ByNumberOfLocations
+        R.id.sortByTitle -> ByName
+        else -> None
+      }
+    )
 
     dismissAllowingStateLoss()
   }
@@ -108,12 +120,9 @@ class SortOptionDialog(
 
   override fun onStart() {
     super.onStart()
-    dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-      WindowManager.LayoutParams.WRAP_CONTENT)
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    _binding = null
+    dialog?.window?.setLayout(
+      WindowManager.LayoutParams.MATCH_PARENT,
+      WindowManager.LayoutParams.WRAP_CONTENT
+    )
   }
 }

@@ -42,44 +42,43 @@ import com.raywenderlich.android.trippey.model.Trip
 import com.raywenderlich.android.trippey.model.getSortOptionFromName
 
 class TrippeyRepositoryImpl(
-    private val sharedPreferences: SharedPreferences,
-    private val filesHelper: FilesHelper,
-    private val gson: Gson
+  private val sharedPreferences: SharedPreferences,
+  private val filesHelper: FilesHelper,
+  private val gson: Gson
 ) : TrippeyRepository {
 
-    companion object {
-        const val KEY_SORT_OPTION = "sort_option"
-    }
+  companion object {
+    const val KEY_SORT_OPTION = "sort_option"
+  }
 
-    override fun saveTrip(trip: Trip) {
-        filesHelper.saveData(trip.id, gson.toJson(trip))
-    }
+  override fun saveTrip(trip: Trip) {
+    filesHelper.saveData(trip.id, gson.toJson(trip))
+  }
 
-    override fun updateTrip(trip: Trip) {
-        deleteTrip(trip.id)
-        saveTrip(trip)
-    }
+  override fun updateTrip(trip: Trip) {
+    deleteTrip(trip.id)
+    saveTrip(trip)
+  }
 
-    override fun deleteTrip(tripId: String) {
-        filesHelper.deleteData(tripId)
-    }
+  override fun deleteTrip(tripId: String) {
+    filesHelper.deleteData(tripId)
+  }
 
-    override fun getTrips(): List<Trip> {
-        val tripFiles = filesHelper.getData()
+  override fun getTrips(): List<Trip> {
+    val tripFiles = filesHelper.getData()
 
-        return tripFiles.map {
-            gson.fromJson(it.readText(), Trip::class.java)
-        }
-    }
+    return tripFiles.map { gson.fromJson(it.readText(), Trip::class.java) }
+  }
 
-    override fun getSortOption(): SortOption {
-        val sortOptionName = sharedPreferences.getString(KEY_SORT_OPTION, "") ?: ""
-        return getSortOptionFromName(sortOptionName)
-    }
+  override fun getSortOption(): SortOption {
+    val storedOption = sharedPreferences.getString(KEY_SORT_OPTION, "") ?: ""
 
-    override fun saveSortOption(sortOption: SortOption) {
-        sharedPreferences.edit()
-            .putString(KEY_SORT_OPTION, sortOption.name)
-            .apply()
-    }
+    return getSortOptionFromName(storedOption)
+  }
+
+  override fun saveSortOption(sortOption: SortOption) {
+    sharedPreferences.edit()
+      .putString(KEY_SORT_OPTION, sortOption.name)
+      .apply()
+  }
 }

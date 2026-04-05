@@ -37,8 +37,8 @@ package com.raywenderlich.android.trippey.ui.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.raywenderlich.android.trippey.databinding.ItemTripBinding
 import com.raywenderlich.android.trippey.model.*
+import com.raywenderlich.android.trippey.databinding.ItemTripBinding
 
 class TripAdapter(
   private val onItemLongTapped: (Trip) -> Unit,
@@ -67,7 +67,6 @@ class TripAdapter(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
     val binding = ItemTripBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
     return TripViewHolder(binding)
   }
 }

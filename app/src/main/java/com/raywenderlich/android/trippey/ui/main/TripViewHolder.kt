@@ -37,8 +37,8 @@ package com.raywenderlich.android.trippey.ui.main
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.raywenderlich.android.trippey.R
-import com.raywenderlich.android.trippey.databinding.ItemTripBinding
 import com.raywenderlich.android.trippey.model.Trip
+import com.raywenderlich.android.trippey.databinding.ItemTripBinding
 
 class TripViewHolder(private val binding: ItemTripBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -59,12 +59,12 @@ class TripViewHolder(private val binding: ItemTripBinding) : RecyclerView.ViewHo
       Glide.with(itemView).load(imageToLoad).into(binding.tripImage)
     }
 
-    itemView.setOnLongClickListener {
+    binding.root.setOnLongClickListener {
       onItemLongTap(trip)
       true
     }
 
-    itemView.setOnClickListener {
+    binding.root.setOnClickListener {
       onItemTapped(trip)
     }
   }
