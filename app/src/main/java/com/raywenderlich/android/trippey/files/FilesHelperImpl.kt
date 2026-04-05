@@ -5,7 +5,16 @@ import java.io.FileOutputStream
 
 class FilesHelperImpl(private val directory: File) : FilesHelper {
     override fun saveData(fileName: String, data: String) {
-        TODO("Not yet implemented")
+        val file = buildFile(fileName)
+        val fileOutputStream = buildOutputStream(file)
+
+        try {
+            fileOutputStream.use {
+                it.write(data.toByteArray())
+            }
+        } catch (error: Throwable) {
+            error.printStackTrace()
+        }
     }
 
     override fun getData(): List<File> {
