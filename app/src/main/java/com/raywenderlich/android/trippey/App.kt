@@ -55,8 +55,10 @@ class App : Application() {
             instance.getSharedPreferences(KEY_PREFERENCES, Context.MODE_PRIVATE)
         }
 
+        private val gson by lazy { Gson() }
+
         private val database by lazy {
-            TrippeyDatabase(instance)
+            TrippeyDatabase(instance, gson)
         }
 
         val repository: TrippeyRepository by lazy {
