@@ -74,7 +74,13 @@ class TrippeyRepositoryImpl(
         trips.removeAt(tripIndex)
     }
 
-    override fun getTrips(): List<Trip> = trips
+    override fun getTrips(): List<Trip> {
+        val tripFiles = filesHelper.getData()
+
+        return tripFiles.map {
+            gson.fromJson(it.readText(), Trip::class.java)
+        }
+    }
 
     override fun getSortOption(): SortOption {
         val sortOptionName = sharedPreferences.getString(KEY_SORT_OPTION, "") ?: ""
