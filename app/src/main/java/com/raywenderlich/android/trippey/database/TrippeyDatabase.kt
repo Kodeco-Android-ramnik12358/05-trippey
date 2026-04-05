@@ -45,6 +45,24 @@ class TrippeyDatabase(context: Context) :
     }
 
     fun getTrips(): List<Trip> {
-        return emptyList() // TODO
+        val items = mutableListOf<Trip>()
+        val database = readableDatabase ?: return items
+
+        val cursor = database.query(TRIP_TABLE_NAME, null, null, null, null, null, null)
+
+        while(cursor.moveToNext())
+        {
+            items.add(Trip(
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseConstants.COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseConstants.COLUMN_TITLE)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseConstants.COLUMN_COUNTRY)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseConstants.COLUMN_DETAILS)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseConstants.COLUMN_IMAGE_URL))
+            ))
+        }
+
+        cursor.close()
+
+        return items
     }
 }
