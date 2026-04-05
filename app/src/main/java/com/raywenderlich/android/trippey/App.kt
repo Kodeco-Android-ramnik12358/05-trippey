@@ -38,6 +38,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.raywenderlich.android.trippey.database.TrippeyDatabase
 import com.raywenderlich.android.trippey.files.FilesHelperImpl
 import com.raywenderlich.android.trippey.repository.TrippeyRepository
 import com.raywenderlich.android.trippey.repository.TrippeyRepositoryImpl
@@ -45,42 +46,29 @@ import java.io.File
 
 class App : Application() {
 
-  companion object {
-    private const val KEY_PREFERENCES = "TrippeyPreferences"
+    companion object {
+        private const val KEY_PREFERENCES = "TrippeyPreferences"
 
-    private lateinit var instance: App
+        private lateinit var instance: App
 
-    private val sharedPreferences: SharedPreferences by lazy {
-      instance.getSharedPreferences(KEY_PREFERENCES, Context.MODE_PRIVATE)
+        private val sharedPreferences: SharedPreferences by lazy {
+            instance.getSharedPreferences(KEY_PREFERENCES, Context.MODE_PRIVATE)
+        }
+
+        private val database by lazy {
+            TrippeyDatabase(instance)
+        }
+
+        val repository: TrippeyRepository by lazy {
+            TrippeyRepositoryImpl(
+                sharedPreferences,
+                database
+            )
+        }
     }
 
-    private fun getFilesDirectory(): File {
-      val directory = File(instance.getExternalFilesDir(null), "")
-
-      if (!directory.exists()) {
-        directory.mkdirs()
-      }
-
-      return directory
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
     }
-
-    private val filesHelper by lazy {
-      FilesHelperImpl(getFilesDirectory())
-    }
-
-    private val gson by lazy { Gson() }
-
-    val repository: TrippeyRepository by lazy {
-      TrippeyRepositoryImpl(
-        sharedPreferences,
-        filesHelper,
-        gson
-      )
-    }
-  }
-
-  override fun onCreate() {
-    super.onCreate()
-    instance = this
-  }
 }
